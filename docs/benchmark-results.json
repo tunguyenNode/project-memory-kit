@@ -1,0 +1,22 @@
+{
+  "scenario": "1000 unrelated synthetic facts plus one superseded decision and its replacement",
+  "python": "3.12.14",
+  "storage": "temporary on-disk SQLite; single process; warm repeated reads",
+  "repeats": 30,
+  "budget_chars": 4000,
+  "naive_full_history": {
+    "bytes_utf8": 566272,
+    "records": 1002,
+    "includes_superseded": true,
+    "median_retrieval_serialization_ms": 4.662
+  },
+  "harness_query_pack": {
+    "bytes_utf8": 528,
+    "records": 1,
+    "selected_expected_current_id": true,
+    "includes_superseded": false,
+    "median_retrieval_serialization_ms": 6.618
+  },
+  "context_byte_reduction_percent": 99.91,
+  "limits": "One easy lexical synthetic fixture, not a real-agent accuracy or speed test. Both methods scan rows; harness also scans for warnings. No LLM latency, tokens, cost or quality measured. Baseline is naive full history, not a tuned competitor or maintained Markdown handoff. Timing varies by machine."
+}
