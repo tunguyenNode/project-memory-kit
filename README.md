@@ -108,3 +108,25 @@ Run `python examples/benchmark.py` for a synthetic, reproducible comparison agai
 See `docs/harness-design.md` for architecture and planned improvements, and `docs/market-validation.md` for unvalidated customer/revenue hypotheses and proposed acceptance benchmarks. Planned items are not implemented features.
 
 Concurrent first-ever session-end checkpoint writes can create two active checkpoints because the adapter reads before inserting. Later checkpoint writes detect ambiguity and fail closed. Use one session writer per project in this MVP; transactional checkpoint uniqueness is future work.
+
+## Experimental optional index (working-tree patch)
+
+The frozen v0.1 release is unchanged. The separate optional index is explicitly selected by importing it; neither the CLI nor Harness uses it by default.
+
+```python
+from project_memory import MemoryStore
+from project_memory.optional_index import OptionalHybridIndex
+
+with MemoryStore("project.sqlite3") as store:
+    store.create_project("sample")
+    index = OptionalHybridIndex(store)  # Explicitly adds a local FTS index and insert trigger.
+    result = index.search("sample", "storage")
+    print(result.mode, result.used_fallback, result.recall_warning)
+    print(result.entries)
+```
+
+If built-in FTS5 is unavailable, the adapter uses the existing scan search without installing anything. Exact-token hits use the index; zero hits or a blank query fall back to substring scanning. Both paths retain project and explicit-supersession filtering. The result is retrieval data, not a ready-to-trust context or action permission: apply the usual stale/conflict review and bounded export policy in your host. The default `Harness.session_start` still uses the original scan and all-active-record warning checks.
+
+This opt-in adapter is not recall-equivalent to the original search. If “SQL” exactly matches one record and is only a substring of “SQLite” in another, the index returns the first and does not fall back to discover the second. Its diagnostics state this limitation, and a test deliberately demonstrates it. Use `MemoryStore.search` when original substring behavior is required. Neither path understands paraphrases. The persistent index requires extra storage and maintenance; only append/supersede through the store API is supported, not direct SQL edits/deletes.
+
+See `experiments/README.md` and the raw experiment results for the tested workload, resource tradeoffs and limitations. An indexed lookup result does not establish a faster complete agent session.
