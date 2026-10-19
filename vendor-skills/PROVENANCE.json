@@ -1,0 +1,46 @@
+{
+  "repository": "https://github.com/mattpocock/skills",
+  "commit": "3cca18b368ae95cdbdebbff572ccafa662551015",
+  "retrieved": "2026-10-19",
+  "mode": "Uninstalled project reference texts",
+  "method": "Complete numbered text retrieved through web tool from commit-pinned raw URLs; web line labels removed, newline normalized. Not claimed byte-identical to Git blobs.",
+  "license": "MIT, Copyright (c) 2026 Matt Pocock",
+  "files": [
+    {
+      "file": "grilling/SKILL.md",
+      "source_path": "skills/productivity/grilling/SKILL.md",
+      "source_url": "https://raw.githubusercontent.com/mattpocock/skills/3cca18b368ae95cdbdebbff572ccafa662551015/skills/productivity/grilling/SKILL.md",
+      "web_line_count": 24
+    },
+    {
+      "file": "tdd/SKILL.md",
+      "source_path": "skills/engineering/tdd/SKILL.md",
+      "source_url": "https://raw.githubusercontent.com/mattpocock/skills/3cca18b368ae95cdbdebbff572ccafa662551015/skills/engineering/tdd/SKILL.md",
+      "web_line_count": 31
+    },
+    {
+      "file": "tdd/tests.md",
+      "source_path": "skills/engineering/tdd/tests.md",
+      "source_url": "https://raw.githubusercontent.com/mattpocock/skills/3cca18b368ae95cdbdebbff572ccafa662551015/skills/engineering/tdd/tests.md",
+      "web_line_count": 71
+    },
+    {
+      "file": "tdd/mocking.md",
+      "source_path": "skills/engineering/tdd/mocking.md",
+      "source_url": "https://raw.githubusercontent.com/mattpocock/skills/3cca18b368ae95cdbdebbff572ccafa662551015/skills/engineering/tdd/mocking.md",
+      "web_line_count": 56
+    },
+    {
+      "file": "code-review/SKILL.md",
+      "source_path": "skills/engineering/code-review/SKILL.md",
+      "source_url": "https://raw.githubusercontent.com/mattpocock/skills/3cca18b368ae95cdbdebbff572ccafa662551015/skills/engineering/code-review/SKILL.md",
+      "web_line_count": 73
+    },
+    {
+      "file": "LICENSE",
+      "source_path": "LICENSE",
+      "source_url": "https://raw.githubusercontent.com/mattpocock/skills/3cca18b368ae95cdbdebbff572ccafa662551015/LICENSE",
+      "web_line_count": 19
+    }
+  ]
+}

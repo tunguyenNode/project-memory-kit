@@ -164,3 +164,46 @@ python examples/codebase_demo.py
 ```
 
 In the recorded local demo, an unchanged update read zero source bytes and reparsed zero files; one changed file plus one deletion caused one reparse and 48 source bytes read. This is a small synthetic workload, not a large-project performance guarantee. See `docs/codebase-demo-results.json` and `docs/codebase-harness-design.md` for measured scope and remaining gaps. Connect these CLI calls to a chosen agent startup hook explicitly; the package does not automatically attach itself to an agent.
+
+## Requirement checkpoints and worker plans: dry run only
+
+The local workflow engine records the checkpoints an outsourcing-style engagement would need before implementation. It does not start agents, run commands, edit a repository, execute tests, merge changes or deploy.
+
+```sh
+python -m project_memory.workflow create /path/to/private-workflow.json --scope "Add discount handling" --criterion "Default totals remain unchanged" --evidence "requirement:brief-1"
+python -m project_memory.workflow submit /path/to/private-workflow.json
+python -m project_memory.workflow show /path/to/private-workflow.json
+python -m project_memory.workflow approve /path/to/private-workflow.json --hash EXACT_PLAN_HASH --actor requirements-owner
+python -m project_memory.workflow plan /path/to/private-workflow.json --hash EXACT_PLAN_HASH
+```
+
+Copy the exact current `plan_hash` from `show`. The state sequence is draft → awaiting_requirements → approved → planned → awaiting_review → awaiting_acceptance → accepted. `edit` creates a new requirement version and invalidates previous approvals, worker results, review and acceptance. Approval cannot be recorded while still in draft, and a previous version's hash cannot approve a new version.
+
+`plan` records a dependency-checked DAG and declared outputs for architect, implementer, tester and reviewer specifications. The default order is architect → implementer → tester → reviewer. Custom `--dag-json` must include these roles and be acyclic. These are worker specifications, not workers that ran; no dispatch, lease manager or multi-agent executor is implemented.
+
+Caller-provided result JSON is recorded with:
+
+```sh
+python -m project_memory.workflow result /path/to/private-workflow.json --hash EXACT_PLAN_HASH --record-json /path/to/result.json
+```
+
+A result contains `worker_id`, `outputs` matching that worker's declared output names, and `evidence_ids`. Tester records also require `test_outcome` (`pass`, `fail`, `not_run`, or `unknown`) and a caller-supplied `test_logs` string. Do not report pass without supporting evidence. Optional `candidate_issues` contain description, evidence IDs and caller confidence (`low`, `medium`, or `high`); they are always labeled unverified candidates. Log text and source references are stored as data, never executed or fetched.
+
+A completed result set still needs an explicit review:
+
+```sh
+python -m project_memory.workflow review /path/to/private-workflow.json --hash EXACT_PLAN_HASH --results-hash EXACT_RESULTS_HASH --actor reviewer --decision approve --notes "Describe the evidence you reviewed"
+python -m project_memory.workflow accept /path/to/private-workflow.json --hash EXACT_PLAN_HASH --results-hash EXACT_RESULTS_HASH --actor requirements-owner
+```
+
+Use `show` to obtain `current_results_hash`. The review/acceptance gates reject missing results, absent review, reported failing/not-run/unknown tests, missing tester evidence references, or stale hashes. `--decision request_changes` leaves the workflow unaccepted. Replacing an upstream result invalidates downstream results and previous review. Reports remain caller-supplied observations; the review record is a caller attestation, not proof that a test actually ran or that evidence is true. An accepted dry-run checkpoint is not a verified delivery or deployment.
+
+This is a single-writer, local JSON prototype. Actor names are labels, not authenticated identities. Evidence IDs are pointers, not verified external artifacts. File owners can tamper with the state; hashes and an append-style history are not signatures or a tamper-proof audit trail. A stale loaded file is rejected before saving, but there is no concurrent writer/lease service. Requirements, reports and logs must be kept private unless sharing is approved. Obvious-credential checks are heuristic. The state is capped at 4 MiB and each imported result/DAG JSON at 64 KiB.
+
+Run `python examples/workflow_demo.py` for a disposable synthetic demonstration. It intentionally reports `not_run` and shows acceptance blocked; it does not manufacture a passing result. See `docs/workflow-checkpoints.md` for implemented versus future orchestration boundaries.
+
+### Reference documents and remaining execution gates
+
+The selected texts in `vendor-skills/` are pinned, uninstalled reference material, not runtime-enabled skills. Their MIT license remains intact; see `THIRD_PARTY_NOTICES.md`. Not all referenced transitive skill dependencies are included. Reading these files does not authorize commands, installations or external actions. `docs/software-delivery-playbook.md` describes a delivery operating model, not an autonomous implementation service.
+
+The current workflow binds approval to the supplied scope, acceptance criteria and evidence-ID strings. It does not resolve those evidence IDs, bind a verified source-tree hash, detect repository drift automatically or prove tests ran against a particular tree. Future executor work must add source/coverage ledgers, bug-baseline reproduction where applicable, reviewed exceptions for new features, immutable test-artifact/tree provenance, source-drift rejection, bounded permissions and explicit replan/rollback gates. Those controls are not enabled by this dry-run patch.

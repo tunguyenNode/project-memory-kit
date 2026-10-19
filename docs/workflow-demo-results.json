@@ -1,0 +1,12 @@
+{
+  "mode": "synthetic_dry_run",
+  "state": "awaiting_review",
+  "requirement_version": 1,
+  "approval_bound_to_plan_hash": true,
+  "dag_workers_planned": 4,
+  "workers_executed": 0,
+  "project_tests_executed": 0,
+  "reported_test_outcome": "not_run",
+  "acceptance_blocked": true,
+  "reason": "No passing-test evidence; placeholders are unverified caller data."
+}
