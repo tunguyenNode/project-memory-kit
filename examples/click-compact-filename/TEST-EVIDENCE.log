@@ -1,0 +1,159 @@
+Actual fresh test output. Absolute local workspace/runtime paths normalized for portability.
+
+===== click-focused-unittest.log =====
+test_baseline_and_converted_inputs (test_format_filename.TestCompactFilename.test_baseline_and_converted_inputs) ... ok
+test_deterministic_invariants (test_format_filename.TestCompactFilename.test_deterministic_invariants) ... ok
+test_exact_vectors (test_format_filename.TestCompactFilename.test_exact_vectors) ... ok
+test_native_paths (test_format_filename.TestCompactFilename.test_native_paths) ... ok
+test_original_regression (test_format_filename.TestCompactFilename.test_original_regression) ... ok
+test_signature_and_integer_limits (test_format_filename.TestCompactFilename.test_signature_and_integer_limits) ... ok
+test_validation_before_filename_access (test_format_filename.TestCompactFilename.test_validation_before_filename_access) ... ok
+test_windows_drive_and_unc (test_format_filename.TestCompactFilename.test_windows_drive_and_unc) ... skipped 'requires a native Windows host'
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.007s
+
+OK (skipped=1)
+
+===== click-focused-pytest.log =====
+........s                      [100%]
+8 passed, 1 skipped, 906 subtests passed in 0.08s
+
+===== click-independent.log =====
+{"candidate_import": "<click-demo>/click/src/click/__init__.py", "baseline_import": "<click-demo>/baseline/src/click/__init__.py", "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]", "platform": "linux", "filesystem_encoding": "utf-8"}
+test_A10_validation_precedes_filename_conversion (__main__.IndependentFeatureTests.test_A10_validation_precedes_filename_conversion) ... ok
+test_A11_input_conversion_precedes_compaction (__main__.IndependentFeatureTests.test_A11_input_conversion_precedes_compaction) ... ok
+test_A12_keyword_only_and_int_subclass (__main__.IndependentFeatureTests.test_A12_keyword_only_and_int_subclass) ... ok
+test_A1_default_none_compatibility_including_exceptions (__main__.IndependentFeatureTests.test_A1_default_none_compatibility_including_exceptions) ... ok
+test_deterministic_corpus_invariants (__main__.IndependentFeatureTests.test_deterministic_corpus_invariants) ... ok
+test_exact_A2_through_A9_A13_through_A18 (__main__.IndependentFeatureTests.test_exact_A2_through_A9_A13_through_A18) ... ok
+test_valid_limit_preserves_filename_failure (__main__.IndependentFeatureTests.test_valid_limit_preserves_filename_failure) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.021s
+
+OK
+
+===== click-full-pytest-installed.log =====
+........................................................................ [  3%]
+........................................................................ [  6%]
+........................................................................ [  9%]
+........................................................................ [ 12%]
+..................................................x..................... [ 15%]
+........................................................................ [ 18%]
+........................................................................ [ 21%]
+........................................................................ [ 25%]
+........................................................................ [ 28%]
+........................................................................ [ 31%]
+........................................................................ [ 34%]
+........................................................................ [ 37%]
+........................................................................ [ 40%]
+........................................................................ [ 43%]
+........................................................................ [ 47%]
+........................................................................ [ 50%]
+........................................................................ [ 53%]
+........................................................................ [ 56%]
+........................................................................ [ 59%]
+........................................................................ [ 62%]
+........................................................................ [ 65%]
+........................................................................ [ 69%]
+........................................................................ [ 72%]
+..........................................sssssssssssssssssssss......... [ 75%]
+.........ss............................................................. [ 78%]
+........................................................................ [ 81%]
+........................................................................ [ 84%]
+.............s.......................................................... [ 87%]
+........................................................................ [ 90%]
+...................................s.................................................................. [ 95%]
+........................................................................ [ 98%]
+.................................                                        [100%]
+2269 passed, 25 skipped, 31000 deselected, 1 xfailed, 906 subtests passed in 5.22s
+
+===== memory-main.log =====
+test_exact_integer_budget_and_omission_accounting (test_adversarial.AdversarialMemoryTests.test_exact_integer_budget_and_omission_accounting) ... ok
+test_export_cannot_break_json_envelope (test_adversarial.AdversarialMemoryTests.test_export_cannot_break_json_envelope) ... ok
+test_failed_cross_project_revision_rolls_back (test_adversarial.AdversarialMemoryTests.test_failed_cross_project_revision_rolls_back) ... ok
+test_history_from_any_link_is_complete (test_adversarial.AdversarialMemoryTests.test_history_from_any_link_is_complete) ... ok
+test_invalid_budget_types_are_rejected (test_adversarial.AdversarialMemoryTests.test_invalid_budget_types_are_rejected) ... ok
+test_invalid_staleness_is_rejected (test_adversarial.AdversarialMemoryTests.test_invalid_staleness_is_rejected) ... ok
+test_invalid_timestamp_error_does_not_echo_input (test_adversarial.AdversarialMemoryTests.test_invalid_timestamp_error_does_not_echo_input) ... ok
+test_sql_text_remains_literal (test_adversarial.AdversarialMemoryTests.test_sql_text_remains_literal) ... ok
+test_ast_structure_no_execution_and_incremental_update (test_codebase.CodebaseTests.test_ast_structure_no_execution_and_incremental_update) ... ok
+test_empty_source_and_credential_filename (test_codebase.CodebaseTests.test_empty_source_and_credential_filename) ... ok
+test_freshness_and_bounded_source_provenance (test_codebase.CodebaseTests.test_freshness_and_bounded_source_provenance) ... ok
+test_large_synthetic_corpus_incremental (test_codebase.CodebaseTests.test_large_synthetic_corpus_incremental) ... ok
+test_parse_failure_drops_old_symbols (test_codebase.CodebaseTests.test_parse_failure_drops_old_symbols) ... ok
+test_partial_scan_cannot_report_deletion (test_codebase.CodebaseTests.test_partial_scan_cannot_report_deletion) ... ok
+test_secrets_binary_symlink_hardlink_and_exclusions (test_codebase.CodebaseTests.test_secrets_binary_symlink_hardlink_and_exclusions) ... ok
+test_size_and_state_location_guards (test_codebase.CodebaseTests.test_size_and_state_location_guards) ... ok
+test_task_plan_criteria_decisions_and_no_execution (test_codebase.CodebaseTests.test_task_plan_criteria_decisions_and_no_execution) ... ok
+test_empty_directories_consume_traversal_budget (test_codebase_review.CodebaseReviewTests.test_empty_directories_consume_traversal_budget) ... ok
+test_failed_decision_read_does_not_modify_unrelated_database (test_codebase_review.CodebaseReviewTests.test_failed_decision_read_does_not_modify_unrelated_database) ... ok
+test_growing_file_cannot_exceed_total_read_budget (test_codebase_review.CodebaseReviewTests.test_growing_file_cannot_exceed_total_read_budget) ... ok
+test_explicit_schema_and_secret_guard (test_harness.HarnessTests.test_explicit_schema_and_secret_guard) ... ok
+test_harness_project_isolation (test_harness.HarnessTests.test_harness_project_isolation) ... ok
+test_session_hooks_and_checkpoint_history (test_harness.HarnessTests.test_session_hooks_and_checkpoint_history) ... ok
+test_bounded_context_and_unicode (test_memory.MemoryTests.test_bounded_context_and_unicode) ... ok
+test_cli (test_memory.MemoryTests.test_cli) ... ok
+test_conflicts_and_stale (test_memory.MemoryTests.test_conflicts_and_stale) ... ok
+test_injection_is_inert_data (test_memory.MemoryTests.test_injection_is_inert_data) ... ok
+test_integer_budget_and_staleness_validation (test_memory.MemoryTests.test_integer_budget_and_staleness_validation) ... ok
+test_key_patterns_rejected (test_memory.MemoryTests.test_key_patterns_rejected) ... ok
+test_literal_search_and_unknown_project (test_memory.MemoryTests.test_literal_search_and_unknown_project) ... ok
+test_persistence_across_sessions (test_memory.MemoryTests.test_persistence_across_sessions) ... ok
+test_project_isolation (test_memory.MemoryTests.test_project_isolation) ... ok
+test_revision_requires_reason_and_same_topic (test_memory.MemoryTests.test_revision_requires_reason_and_same_topic) ... ok
+test_secrets_rejected_in_all_metadata (test_memory.MemoryTests.test_secrets_rejected_in_all_metadata) ... ok
+test_supersession_keeps_history (test_memory.MemoryTests.test_supersession_keeps_history) ... ok
+test_timestamp_error_does_not_echo_input (test_memory.MemoryTests.test_timestamp_error_does_not_echo_input) ... ok
+test_timestamp_validation (test_memory.MemoryTests.test_timestamp_validation) ... ok
+test_blank_query_and_unavailable_index_fall_back (test_optional_index.OptionalIndexTests.test_blank_query_and_unavailable_index_fall_back) ... ok
+test_existing_records_are_indexed_on_first_open (test_optional_index.OptionalIndexTests.test_existing_records_are_indexed_on_first_open) ... ok
+test_fast_path_and_zero_hit_fallback (test_optional_index.OptionalIndexTests.test_fast_path_and_zero_hit_fallback) ... ok
+test_fts_operators_remain_literal (test_optional_index.OptionalIndexTests.test_fts_operators_remain_literal) ... ok
+test_partial_hit_limit_is_explicit (test_optional_index.OptionalIndexTests.test_partial_hit_limit_is_explicit) ... ok
+test_project_and_revision_filters (test_optional_index.OptionalIndexTests.test_project_and_revision_filters) ... ok
+test_reopening_does_not_duplicate_index (test_optional_index.OptionalIndexTests.test_reopening_does_not_duplicate_index) ... ok
+test_token_normalization_false_positives_are_filtered (test_optional_index.OptionalIndexTests.test_token_normalization_false_positives_are_filtered) ... ok
+test_transaction_rollback_preserves_index (test_optional_index.OptionalIndexTests.test_transaction_rollback_preserves_index) ... ok
+test_declared_test_filename_is_prioritized (test_task_test_selection.TaskTestSelectionTests.test_declared_test_filename_is_prioritized) ... ok
+test_large_high_rank_excerpt_is_shortened_to_budget (test_task_test_selection.TaskTestSelectionTests.test_large_high_rank_excerpt_is_shortened_to_budget) ... ok
+test_ranked_test_still_requires_fresh_hash (test_task_test_selection.TaskTestSelectionTests.test_ranked_test_still_requires_fresh_hash) ... ok
+test_symbol_test_prioritized_over_ci_and_conftest (test_task_test_selection.TaskTestSelectionTests.test_symbol_test_prioritized_over_ci_and_conftest) ... ok
+test_approval_cannot_be_bypassed (test_workflow.WorkflowTests.test_approval_cannot_be_bypassed) ... ok
+test_candidate_issue_is_not_verified_bug (test_workflow.WorkflowTests.test_candidate_issue_is_not_verified_bug) ... ok
+test_cycle_rejected (test_workflow.WorkflowTests.test_cycle_rejected) ... ok
+test_failed_or_not_run_tests_cannot_pass_gate (test_workflow.WorkflowTests.test_failed_or_not_run_tests_cannot_pass_gate) ... ok
+test_missing_dependency_result_rejected (test_workflow.WorkflowTests.test_missing_dependency_result_rejected) ... ok
+test_missing_tests_and_review_block_acceptance (test_workflow.WorkflowTests.test_missing_tests_and_review_block_acceptance) ... ok
+test_no_fake_pass_or_output_override (test_workflow.WorkflowTests.test_no_fake_pass_or_output_override) ... ok
+test_old_loaded_state_cannot_overwrite_edited_plan (test_workflow.WorkflowTests.test_old_loaded_state_cannot_overwrite_edited_plan) ... ok
+test_replacing_upstream_result_invalidates_review_and_descendants (test_workflow.WorkflowTests.test_replacing_upstream_result_invalidates_review_and_descendants) ... ok
+test_reported_pass_without_evidence_is_not_acceptable (test_workflow.WorkflowTests.test_reported_pass_without_evidence_is_not_acceptable) ... ok
+test_reviewed_acceptance_is_explicit_and_hash_bound (test_workflow.WorkflowTests.test_reviewed_acceptance_is_explicit_and_hash_bound) ... ok
+test_scope_change_clears_accepted_state (test_workflow.WorkflowTests.test_scope_change_clears_accepted_state) ... ok
+test_wrong_hash_and_old_approval_replay (test_workflow.WorkflowTests.test_wrong_hash_and_old_approval_replay) ... ok
+test_oversized_create_does_not_leave_invalid_file (test_workflow_review.WorkflowReviewTests.test_oversized_create_does_not_leave_invalid_file) ... ok
+test_rejected_edit_preserves_in_memory_and_disk_state (test_workflow_review.WorkflowReviewTests.test_rejected_edit_preserves_in_memory_and_disk_state) ... ok
+test_stale_writer_cannot_overwrite_newer_state (test_workflow_review.WorkflowReviewTests.test_stale_writer_cannot_overwrite_newer_state) ... ok
+test_top_level_list_is_clean_schema_error (test_workflow_review.WorkflowReviewTests.test_top_level_list_is_clean_schema_error) ... ok
+
+----------------------------------------------------------------------
+Ran 67 tests in 0.767s
+
+OK
+
+===== memory-experimental.log =====
+test_default_pack_bound_and_accounting (test_compare_retrieval.ExperimentChecks.test_default_pack_bound_and_accounting) ... ok
+test_expected_indexed_fixture_semantics (test_compare_retrieval.ExperimentChecks.test_expected_indexed_fixture_semantics) ... ok
+test_query_operators_are_literal (test_compare_retrieval.ExperimentChecks.test_query_operators_are_literal) ... ok
+test_trigger_mutation_rolls_back_atomically (test_compare_retrieval.ExperimentChecks.test_trigger_mutation_rolls_back_atomically) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.009s
+
+OK
+
+===== Published runner fresh export rerun: final summary =====
+2269 passed, 25 skipped, 31000 deselected, 1 xfailed, 906 subtests passed in 4.40s
+Runner exit code: 0

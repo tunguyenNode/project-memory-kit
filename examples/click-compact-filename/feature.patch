@@ -1,0 +1,318 @@
+diff --git a/docs/utils.md b/docs/utils.md
+index f5ccae4..7117d49 100644
+--- a/docs/utils.md
++++ b/docs/utils.md
+@@ -252,9 +252,10 @@ click.launch("/my/downloaded/file.txt", locate=True)
+ 
+ Because filenames might not be Unicode, formatting them can be a bit tricky.
+ 
+-The way this works with click is through the {func}`format_filename` function. It does a best-effort conversion of the
+-filename to Unicode and will never fail. This makes it possible to use these filenames in the context of a full Unicode
+-string.
++The {func}`format_filename` function converts supported filename inputs to Unicode
++for display, replacing invalid bytes and surrogate escapes. With valid options,
++this makes them suitable for inclusion in a Unicode string. Unsupported inputs
++may still raise conversion errors.
+ 
+ Example:
+ 
+@@ -262,6 +263,43 @@ Example:
+ click.echo(f"Path: {click.format_filename(b'foo.txt')}")
+ ```
+ 
++For a compact display label, opt in with the keyword-only `max_length` argument:
++
++```python
++filename = "longfilename.txt"
++label = click.format_filename(filename, shorten=True, max_length=12)
++click.echo(label)  # longfil….txt
++# Keep using filename, not label, for file operations.
++```
++
++The default, `max_length=None`, preserves the existing output. Positive integers
++(including integer subclasses, but excluding booleans) are accepted, with no
++upper limit. Other types raise `TypeError` with the message
++`max_length must be an integer or None`; values below one raise `ValueError`
++with the message `max_length must be at least 1`. The limit is checked before
++accessing the filename, including calling `__fspath__`.
++
++Shortening to the basename and Unicode conversion happen before limiting the
++length. Short and empty strings are unchanged. Longer strings receive the single
++ellipsis character `…`. The final extension is preserved only when it fits with
++at least one prefix character and the ellipsis. For example, `archive.tar.gz`
++with a limit of 10 becomes `archiv….gz`; `abc.txt` with a limit of 5 becomes
++`abc.…`, while a limit of 6 gives `a….txt`. A limit of 1 yields `…` when truncation
++is needed.
++
++Basename and extension handling follow the host platform's `os.path` rules.
++Dotfiles such as `.bashrc` have no extension, a trailing dot counts as the
++extension `.`, and dots in parent directories do not count as extensions.
++With `shorten=False`, the retained prefix can contain directory text; the
++basename is not guaranteed to survive. Foreign-platform separators are not
++reinterpreted.
++
++The limit counts Python Unicode code points, not terminal cells or grapheme
++clusters. Combining marks and emoji sequences may be split, and wide characters,
++control characters, and ANSI codes receive no special treatment. No Unicode
++normalization is performed. Compact labels are lossy, may collide, and provide
++no additional redaction guarantee. Never use them as actual filesystem paths.
++
+ ## Intelligent File Opening
+ 
+ ```{versionadded} 3.0
+diff --git a/src/click/utils.py b/src/click/utils.py
+index 617ff5e..63d6bff 100644
+--- a/src/click/utils.py
++++ b/src/click/utils.py
+@@ -430,6 +430,8 @@ def open_file(
+ def format_filename(
+     filename: str | bytes | os.PathLike[str] | os.PathLike[bytes],
+     shorten: bool = False,
++    *,
++    max_length: int | None = None,
+ ) -> str:
+     """Format a filename as a string for display. Ensures the filename can be
+     displayed by replacing any invalid bytes or surrogate escapes in the name
+@@ -449,11 +451,32 @@ def format_filename(
+     -   Python is started in UTF-8 mode  with  ``PYTHONUTF8=1`` or ``-X utf8``.
+         Python opens stdout and stderr with ``errors="surrogateescape"``.
+ 
+-    :param filename: formats a filename for UI display.  This will also convert
+-                     the filename into unicode without failing.
+-    :param shorten: this optionally shortens the filename to strip of the
+-                    path that leads up to it.
++    With valid options, supported filenames are converted to Unicode for
++    display. Unsupported filename inputs may still raise conversion errors.
++    Compact labels are lossy: do not use them for file operations or assume
++    they are unique.
++
++    :param filename: The filename to format for UI display.
++    :param shorten: Strip the leading path using the host platform's rules.
++    :param max_length: Optional positive integer limit in Unicode code points,
++        applied after conversion. Append ``…`` when truncating, preserving the
++        final extension when it fits with at least one prefix character and
++        the marker. Otherwise, keep only a prefix and the marker. This is not
++        a terminal-cell limit and may split a grapheme cluster. ``None``
++        leaves the converted filename unchanged.
++    :raises TypeError: If ``max_length`` is not an integer or ``None``.
++        Booleans are not accepted.
++    :raises ValueError: If ``max_length`` is less than one.
++
++    The limit is validated before accessing the filename. Path and extension
++    handling use the host platform's ``os.path`` rules.
+     """
++    if max_length is not None:
++        if isinstance(max_length, bool) or not isinstance(max_length, int):
++            raise TypeError("max_length must be an integer or None")
++        if max_length < 1:
++            raise ValueError("max_length must be at least 1")
++
+     if shorten:
+         filename = os.path.basename(filename)
+     else:
+@@ -466,6 +489,14 @@ def format_filename(
+             "utf-8", "replace"
+         )
+ 
++    if max_length is not None and len(filename) > max_length:
++        stem, extension = os.path.splitext(filename)
++
++        if extension and max_length >= len(extension) + 2:
++            return stem[: max_length - len(extension) - 1] + "…" + extension
++
++        return filename[: max_length - 1] + "…"
++
+     return filename
+ 
+ 
+diff --git a/tests/test_utils/test_format_filename.py b/tests/test_utils/test_format_filename.py
+index 5b9d062..472f1ea 100644
+--- a/tests/test_utils/test_format_filename.py
++++ b/tests/test_utils/test_format_filename.py
+@@ -1,3 +1,8 @@
++import os
++import sys
++import unittest
++from pathlib import Path
++
+ import click
+ 
+ 
+@@ -7,3 +12,177 @@ def test_filename_formatting():
+     assert click.format_filename("/x/foo.txt") == "/x/foo.txt"
+     assert click.format_filename("/x/foo.txt", shorten=True) == "foo.txt"
+     assert click.format_filename("/x/\ufffd.txt", shorten=True) == "�.txt"
++
++
++# unittest keeps the opt-in feature checks runnable without extra dependencies;
++# pytest also collects these TestCase methods as part of the normal suite.
++
++
++def baseline_format(filename, shorten=False):
++    """Pinned pre-feature conversion, retained as a compatibility oracle."""
++    filename = os.path.basename(filename) if shorten else os.fspath(filename)
++    if isinstance(filename, bytes):
++        return filename.decode(sys.getfilesystemencoding(), "replace")
++    return filename.encode("utf-8", "surrogateescape").decode("utf-8", "replace")
++
++
++class FilenamePath:
++    def __init__(self, value):
++        self.value = value
++        self.calls = 0
++
++    def __fspath__(self):
++        self.calls += 1
++        return self.value
++
++
++class TestCompactFilename(unittest.TestCase):
++    def test_exact_vectors(self):
++        # A2–A7, A9, A15–A17: expectations are frozen product decisions.
++        cases = [
++            ("short.txt", 12, "short.txt"),
++            ("longfilename.txt", 12, "longfil….txt"),
++            ("archive.tar.gz", 10, "archiv….gz"),
++            (".bashrc", 5, ".bas…"),
++            ("abcdef.", 4, "ab…."),
++            ("abc.txt", 5, "abc.…"),
++            ("abc.txt", 6, "a….txt"),
++            ("abc.txt", 1, "…"),
++            ("", 1, ""),
++            ("abc", 3, "abc"),
++            ("😀😀😀.txt", 6, "😀….txt"),
++            ("e\u0301xyz", 2, "e…"),
++            ("..bashrc", 5, "..ba…"),
++            ("archive.tar.gz", 14, "archive.tar.gz"),
++            ("abc.txt", 7, "abc.txt"),
++            ("👩\u200d💻abc", 3, "👩\u200d…"),
++            (b"longfilename.txt", 12, "longfil….txt"),
++        ]
++        for filename, limit, expected in cases:
++            with self.subTest(filename=filename, limit=limit):
++                self.assertEqual(
++                    click.format_filename(filename, max_length=limit), expected
++                )
++
++    def test_native_paths(self):
++        # A8, A13, A14. Use actual host separators, including Windows hosts.
++        cases = [
++            (
++                os.sep + os.path.join("tmp", "longfilename.txt"),
++                True, 12, "longfil….txt",
++            ),
++            (os.sep + os.path.join("tmp", "longfilename.txt"), False, 12,
++             os.sep + "tmp" + os.sep + "lo….txt"),
++            (os.sep + os.path.join("dir.with.dot", "abcdef"), False, 8,
++             os.sep + "dir.wi…"),
++            (os.sep + os.path.join("tmp", "abcdef") + os.sep, True, 3, ""),
++            (os.sep + os.path.join("tmp", "abcdef") + os.sep, False, 5,
++             os.sep + "tmp…"),
++        ]
++        for filename, shorten, limit, expected in cases:
++            with self.subTest(filename=filename, shorten=shorten):
++                self.assertEqual(
++                    click.format_filename(filename, shorten, max_length=limit), expected
++                )
++
++    def test_validation_before_filename_access(self):
++        # A10: all invalid options fail before invoking the filename protocol.
++        for limit in (True, False, 1.0, "5", [], {}, object(), 0, -1):
++            for shorten in (False, True):
++                with self.subTest(limit=limit, shorten=shorten):
++                    filename = FilenamePath("longfilename.txt")
++                    error = ValueError if type(limit) is int else TypeError
++                    message = (
++                        "max_length must be at least 1" if error is ValueError
++                        else "max_length must be an integer or None"
++                    )
++                    with self.assertRaises(error) as caught:
++                        click.format_filename(filename, shorten, max_length=limit)
++                    self.assertEqual(str(caught.exception), message)
++                    self.assertEqual(filename.calls, 0)
++
++    def test_signature_and_integer_limits(self):
++        # A12, A18: existing positional usage; keyword-only new option.
++        class Integer(int):
++            pass
++
++        with self.assertRaises(TypeError):
++            click.format_filename("abcdef", False, 3)
++        self.assertEqual(
++            click.format_filename("abcdef", False, max_length=Integer(3)), "ab…"
++        )
++        self.assertEqual(click.format_filename("abc", max_length=10**10000), "abc")
++        self.assertEqual(click.format_filename("abc", False), "abc")
++
++    def test_baseline_and_converted_inputs(self):
++        # A1, A11, A17: supported inputs, conversion order, and existing errors.
++        inputs = [
++            "", "abc.txt", "a\udcff.txt", b"bad\xff.txt", b"",
++            Path("longfilename.txt"), FilenamePath("longfilename.txt"),
++            FilenamePath(b"bad\xff.txt"), os.sep + "tmp" + os.sep,
++            None, 123, object(), FilenamePath(123), "\ud800",
++        ]
++        for filename in inputs:
++            for shorten in (False, True):
++                with self.subTest(filename=filename, shorten=shorten):
++                    try:
++                        expected = baseline_format(filename, shorten)
++                    except (TypeError, UnicodeError) as error:
++                        for kwargs in ({}, {"max_length": None}, {"max_length": 3}):
++                            with self.assertRaises(type(error)) as caught:
++                                click.format_filename(filename, shorten, **kwargs)
++                            self.assertEqual(str(caught.exception), str(error))
++                        continue
++                    self.assertEqual(click.format_filename(filename, shorten), expected)
++                    self.assertEqual(
++                        click.format_filename(filename, shorten, max_length=None),
++                        expected,
++                    )
++                    for limit in (1, 3, 6, 12):
++                        actual = click.format_filename(
++                            filename, shorten, max_length=limit
++                        )
++                        self.assertEqual(
++                            actual, click.format_filename(expected, max_length=limit)
++                        )
++                        self.assertLessEqual(len(actual), limit)
++
++    def test_deterministic_invariants(self):
++        # R3–R6 on varied extensions, Unicode, native and foreign separators.
++        prefixes = ["", "a", "abcdef", ".", "..", "漢字😀", "e\u0301", "👩\u200d💻",
++                    "\x1b[31m", "a\nb", "dir.with.dot" + os.sep,
++                    "C:\\tmp\\", "//server/share/"]
++        suffixes = ["", ".", ".txt", ".tar.gz", ".averylongextension"]
++        for prefix in prefixes:
++            for suffix in suffixes:
++                filename = prefix + suffix
++                for limit in range(1, len(filename) + 3):
++                    with self.subTest(filename=filename, limit=limit):
++                        actual = click.format_filename(filename, max_length=limit)
++                        self.assertLessEqual(len(actual), limit)
++                        if len(filename) <= limit:
++                            self.assertEqual(actual, filename)
++                        else:
++                            self.assertEqual(len(actual), limit)
++                            extension = os.path.splitext(filename)[1]
++                            if extension and len(extension) + 2 <= limit:
++                                self.assertTrue(actual.endswith("…" + extension))
++                                self.assertEqual(actual[:-len(extension)-1],
++                                                 filename[:limit-len(extension)-1])
++                            else:
++                                self.assertEqual(actual, filename[:limit-1] + "…")
++
++    @unittest.skipUnless(os.name == "nt", "requires a native Windows host")
++    def test_windows_drive_and_unc(self):
++        for filename in (
++            r"C:\tmp\longfilename.txt", r"\\server\share\longfilename.txt"
++        ):
++            with self.subTest(filename=filename):
++                self.assertEqual(
++                    click.format_filename(filename, True, max_length=12), "longfil….txt"
++                )
++                self.assertEqual(click.format_filename(filename, max_length=12),
++                                 filename[:7] + "….txt")
++
++    def test_original_regression(self):
++        test_filename_formatting()
