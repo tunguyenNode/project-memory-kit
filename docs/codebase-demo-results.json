@@ -8,7 +8,7 @@
       "bytes_read": 48814,
       "paths_seen": 1004
     },
-    "elapsed_ms": 75.603
+    "elapsed_ms": 78.212
   },
   "unchanged_update": {
     "stats": {
@@ -18,7 +18,7 @@
       "bytes_read": 0,
       "paths_seen": 1004
     },
-    "elapsed_ms": 36.233
+    "elapsed_ms": 30.88
   },
   "changed_update": {
     "stats": {
@@ -41,7 +41,7 @@
   },
   "stale_query_rejected": true,
   "query_pack_chars": 748,
-  "task_plan_chars": 2767,
+  "task_plan_chars": 2934,
   "tokens_measured": false,
   "source_code_executed": false,
   "limits": "Single local synthetic run, not a real-project speed guarantee. Unchanged update trusts metadata stamps; selected query sources are rehashed. No root cause, runtime dependency graph or test result is inferred."

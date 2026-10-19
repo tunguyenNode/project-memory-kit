@@ -1,0 +1,12 @@
+{
+  "README.md": "a6ecaea086a989f31dddbdf1af218ca381d06cad0bcac785a029a709065ac6c5",
+  "TEST_SELECTION_PATCH_NOTES.md": "a79fa9e0b417b7a2e713e192831fe36f6300069507284d3f7abe3220810c7908",
+  "docs/click-integration-before-fix.json": "d8b6bb0af184edf02a51b32c74e305fa34bfc7079e4196a7d7547460e6b8f586",
+  "docs/click-integration-report.md": "fb8426e0a0f327a7b4329567ab1b385007b3e839c2b81487eaa8fab8f42706c0",
+  "docs/click-integration-results.json": "d233da185e855fe38d0f7013287bcdc5579ab45ab8352f0064808d5d30dc2d81",
+  "docs/codebase-demo-results.json": "aacfd96b9c853ed23a4fe50087523b7752c86532c3dbf91174f9751a8be120a5",
+  "docs/user-guide.md": "422b8ffed7c1f167cd6dddfa2fd4843dc051b1248b14e24306d97be1670f5f5d",
+  "examples/click_integration.py": "f77b5daa9f78982a95d8d78a272dfb9d63d7160495033ba427514a5ce4d7867d",
+  "project_memory/codebase.py": "d779f385c3f6f29d48e40b0add7e5cb8e62ca5b1016d2ea7e81d00caa8e95db4",
+  "tests/test_task_test_selection.py": "cb8e0529463c5488b439ad6423e5312ba721c5dcbc930024456dfcd7c50a0f4e"
+}

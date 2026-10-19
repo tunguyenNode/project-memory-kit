@@ -1,0 +1,246 @@
+{
+  "repository": "https://github.com/pallets/click",
+  "commit": "2247b35ea1c47c727d7a06e51fa280e12a863ff6",
+  "license": "BSD-3-Clause",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "tracked_files": 178,
+  "tracked_python_files": 91,
+  "indexed_python_files": 89,
+  "indexed_symbols": 1939,
+  "declared_imports": 687,
+  "python_parse_failures": [],
+  "skipped_by_reason": {
+    "Unsupported or binary file type": 22,
+    "Possible credential pattern; entire file omitted": 1,
+    "Excluded filename": 1
+  },
+  "scan_stats": {
+    "indexed_files": 154,
+    "reused_files": 0,
+    "parsed_files": 154,
+    "bytes_read": 1324933,
+    "paths_seen": 205
+  },
+  "complete_within_filters": true,
+  "exact_matches": 1,
+  "natural_matches": 0,
+  "test_matches": 1,
+  "original_source_sha256": "4720e22c292047ff1a747546b1ba80e96d1d8e8158e2e21ff01cdddb6498db17",
+  "modified_source_sha256": "037ebb088899d68a0d4d27effdf836a4535e897e9794c6fb617414fa616abc15",
+  "original_tree_clean_after": true,
+  "click_code_executed": false,
+  "click_tests_run": false,
+  "tokens_measured": false,
+  "measurements": {
+    "scan": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "scan",
+        "/workspace/shared/harness-integration/repos/click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/state"
+      ],
+      "exit_code": 0,
+      "wall_ms": 393.121,
+      "stdout_chars": 5841,
+      "stdout_utf8_bytes": 5841,
+      "serialized_chars_excluding_cli_newline": 5840
+    },
+    "query-exact": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "query",
+        "/workspace/shared/harness-integration/repos/click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/state",
+        "src/click/utils.py format_filename",
+        "--max-chars",
+        "8000"
+      ],
+      "exit_code": 0,
+      "wall_ms": 50.013,
+      "stdout_chars": 2492,
+      "stdout_utf8_bytes": 2492,
+      "serialized_chars_excluding_cli_newline": 2491
+    },
+    "query-natural": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "query",
+        "/workspace/shared/harness-integration/repos/click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/state",
+        "How does Click show only the basename of a filename?",
+        "--max-chars",
+        "8000"
+      ],
+      "exit_code": 0,
+      "wall_ms": 49.005,
+      "stdout_chars": 479,
+      "stdout_utf8_bytes": 479,
+      "serialized_chars_excluding_cli_newline": 478
+    },
+    "query-test": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "query",
+        "/workspace/shared/harness-integration/repos/click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/state",
+        "test_format_filename.py",
+        "--max-chars",
+        "8000"
+      ],
+      "exit_code": 0,
+      "wall_ms": 50.565,
+      "stdout_chars": 1134,
+      "stdout_utf8_bytes": 1134,
+      "serialized_chars_excluding_cli_newline": 1133
+    },
+    "task-plan": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "task-plan",
+        "/workspace/shared/harness-integration/repos/click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/state",
+        "--description",
+        "Explain and preserve format_filename shortening behavior",
+        "--query",
+        "src/click/utils.py format_filename",
+        "--criterion",
+        "shorten=True returns basename for /x/foo.txt",
+        "--criterion",
+        "shorten=False preserves /x/foo.txt",
+        "--max-chars",
+        "16000"
+      ],
+      "exit_code": 0,
+      "wall_ms": 62.744,
+      "stdout_chars": 7092,
+      "stdout_utf8_bytes": 7092,
+      "serialized_chars_excluding_cli_newline": 7091
+    },
+    "handoff": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "handoff",
+        "/workspace/shared/harness-integration/repos/click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/state"
+      ],
+      "exit_code": 0,
+      "wall_ms": 52.732,
+      "stdout_chars": 6348,
+      "stdout_utf8_bytes": 6348,
+      "serialized_chars_excluding_cli_newline": 6346
+    },
+    "update-unchanged": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "update",
+        "/workspace/shared/harness-integration/repos/click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/state"
+      ],
+      "exit_code": 0,
+      "wall_ms": 79.561,
+      "stdout_chars": 273,
+      "stdout_utf8_bytes": 273,
+      "serialized_chars_excluding_cli_newline": 272
+    },
+    "copy-scan": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "scan",
+        "/workspace/shared/harness-integration/results/click-run-2/disposable-click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/copy-state"
+      ],
+      "exit_code": 0,
+      "wall_ms": 388.772,
+      "stdout_chars": 5841,
+      "stdout_utf8_bytes": 5841,
+      "serialized_chars_excluding_cli_newline": 5840
+    },
+    "query-stale": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "query",
+        "/workspace/shared/harness-integration/results/click-run-2/disposable-click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/copy-state",
+        "src/click/utils.py format_filename",
+        "--max-chars",
+        "8000"
+      ],
+      "exit_code": 0,
+      "wall_ms": 53.433,
+      "stdout_chars": 582,
+      "stdout_utf8_bytes": 582,
+      "serialized_chars_excluding_cli_newline": 581
+    },
+    "update-changed": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "update",
+        "/workspace/shared/harness-integration/results/click-run-2/disposable-click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/copy-state"
+      ],
+      "exit_code": 0,
+      "wall_ms": 90.638,
+      "stdout_chars": 305,
+      "stdout_utf8_bytes": 305,
+      "serialized_chars_excluding_cli_newline": 304
+    },
+    "query-refreshed": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "project_memory.codebase",
+        "query",
+        "/workspace/shared/harness-integration/results/click-run-2/disposable-click",
+        "--state",
+        "/workspace/shared/harness-integration/results/click-run-2/copy-state",
+        "src/click/utils.py format_filename",
+        "--max-chars",
+        "8000"
+      ],
+      "exit_code": 0,
+      "wall_ms": 54.986,
+      "stdout_chars": 2492,
+      "stdout_utf8_bytes": 2492,
+      "serialized_chars_excluding_cli_newline": 2491
+    }
+  },
+  "harness_source_sha256": {
+    "project_memory/__init__.py": "7f48bcbea66ccf00e31cf21a49a4a5d1540d989c522938b89d907812e24864d7",
+    "project_memory/__main__.py": "666d08ef896cbb193424259de590131c3027e6a6d49007028c80248abf3d1b23",
+    "project_memory/codebase.py": "0e546b0e855787d4ea00dd35560985519e85d8e6b4d84e77f7fd4583619e957a",
+    "project_memory/harness.py": "266c9a8e1ab78b1f74484c3cae63cacc1768e27765e406a697a83f276a38aef2",
+    "project_memory/optional_index.py": "3e60d42e069aea057552dad2e9792aefa1c434308951be04cb4583b2af060ba0",
+    "project_memory/store.py": "c529b6a09fb802247c38721ef038bdee23efb3de0e96a7613d768cd34f15b690",
+    "project_memory/workflow.py": "43d1972e6e23fffd33ac2f486e3d3b74c2a9439598aaa7322b3ef91459ca6dcd"
+  }
+}
