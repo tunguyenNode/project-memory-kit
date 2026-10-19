@@ -1,0 +1,48 @@
+{
+  "fixture": "1000 synthetic modules + one synthetic test; .env excluded",
+  "initial_scan": {
+    "stats": {
+      "indexed_files": 1001,
+      "reused_files": 0,
+      "parsed_files": 1001,
+      "bytes_read": 48814,
+      "paths_seen": 1004
+    },
+    "elapsed_ms": 75.603
+  },
+  "unchanged_update": {
+    "stats": {
+      "indexed_files": 1001,
+      "reused_files": 1001,
+      "parsed_files": 0,
+      "bytes_read": 0,
+      "paths_seen": 1004
+    },
+    "elapsed_ms": 36.233
+  },
+  "changed_update": {
+    "stats": {
+      "indexed_files": 1000,
+      "reused_files": 999,
+      "parsed_files": 1,
+      "bytes_read": 48,
+      "paths_seen": 1003
+    },
+    "changes": {
+      "added": [],
+      "changed": [
+        "package/module_42.py"
+      ],
+      "removed": [
+        "package/module_99.py"
+      ],
+      "not_indexed_or_unverified": []
+    }
+  },
+  "stale_query_rejected": true,
+  "query_pack_chars": 748,
+  "task_plan_chars": 2767,
+  "tokens_measured": false,
+  "source_code_executed": false,
+  "limits": "Single local synthetic run, not a real-project speed guarantee. Unchanged update trusts metadata stamps; selected query sources are rehashed. No root cause, runtime dependency graph or test result is inferred."
+}

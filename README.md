@@ -130,3 +130,37 @@ If built-in FTS5 is unavailable, the adapter uses the existing scan search witho
 This opt-in adapter is not recall-equivalent to the original search. If “SQL” exactly matches one record and is only a substring of “SQLite” in another, the index returns the first and does not fall back to discover the second. Its diagnostics state this limitation, and a test deliberately demonstrates it. Use `MemoryStore.search` when original substring behavior is required. Neither path understands paraphrases. The persistent index requires extra storage and maintenance; only append/supersede through the store API is supported, not direct SQL edits/deletes.
 
 See `experiments/README.md` and the raw experiment results for the tested workload, resource tradeoffs and limitations. An indexed lookup result does not establish a faster complete agent session.
+
+## Legacy-codebase onboarding harness
+
+A separate read-only scanner helps an agent start with a structural map of an unfamiliar repository. It never imports or executes scanned code. Python files receive AST-derived symbol/import declarations; other supported text files receive a file map only. This is an investigation aid, not semantic understanding or autonomous implementation.
+
+Keep scanner state outside the source repository:
+
+```sh
+python -m project_memory.codebase scan /path/to/legacy-repo --state /path/to/private-scan-state
+python -m project_memory.codebase query /path/to/legacy-repo --state /path/to/private-scan-state "module.py calculate_total" --max-chars 8000
+python -m project_memory.codebase update /path/to/legacy-repo --state /path/to/private-scan-state
+python -m project_memory.codebase handoff /path/to/legacy-repo --state /path/to/private-scan-state
+python -m project_memory.codebase task-plan /path/to/legacy-repo --state /path/to/private-scan-state --description "Add discount support" --query "calculate_total" --criterion "Existing totals remain unchanged without a discount"
+```
+
+`scan` and `update` write `manifest.json`, `STRUCTURE.md` and `HANDOFF.md` into the separate state directory. Both support the same incremental operation; `--force` rehashes/reparses eligible files instead of reusing unchanged metadata stamps. The private manifest includes the absolute repository root, relative source paths and source-derived symbols. Query/task-plan output can include source excerpts. Keep these outputs private unless you explicitly approve sharing the repository's information; they are not automatically uploaded by this package.
+
+Updates compare size, modification/change timestamps, inode and device to reuse unchanged records; changed files are rehashed/reparsed. Every selected query source is reopened safely and SHA-256 checked before an excerpt is returned. Stale/missing/unsafe sources produce warnings and no excerpt. The map is only a snapshot, and a source can change after retrieval. Same-metadata reuse is not a cryptographic freshness guarantee; use `--force` when needed. Deleted files are distinguished from skipped/unverified paths; incomplete traversals never establish deletion.
+
+The scanner requires POSIX descriptor/O_NOFOLLOW support and fails closed otherwise. It does not follow repository symlinks and skips hard links, special files, binary/non-UTF-8 content, obvious credentials and sensitive filenames. It excludes VCS directories, common dependency/build/cache directories and unsupported extensions. Credential detection remains heuristic; a clean scan does not establish that source is safe to share. Read-only source access can still affect filesystem access-time metadata; no source writes are performed.
+
+Defaults: 5,000 indexed files, 256 KiB per file, 20 MiB total read bytes, 20,000 visited directory entries and 100 directory levels. Directory traversal streams entries rather than loading an entire directory; directories count toward the traversal budget. Coverage beyond filters/budgets is explicitly incomplete or skipped. Ordering under a traversal limit follows filesystem iteration, so partial coverage is not guaranteed identical across filesystems. Generated Markdown is a structural snapshot with paths, hashes and line ranges, not a complete dependency graph.
+
+Query matches path/symbol/import terms lexically and returns whole excerpts of at most 80 lines under a strict serialized-character budget. It may match similarly named symbols; use additional path terms to narrow a query. It reports omission counts, source hashes, line ranges and freshness checks. Token counts are not measured. Python symbol names are unqualified, imports are unresolved declarations, and no dynamic call graph, root cause or test result is inferred.
+
+`task-plan` combines fresh source evidence with caller-supplied acceptance criteria, known/unknown impact, fresh lexical test-file candidates and a review checklist. Optional `--memory-db existing.sqlite3 --project NAME` reads active project decisions and warnings through read-only SQLite mode. It does not create or modify that decision database. Missing acceptance criteria are flagged. No implementation, command execution, verified test command or autonomous agent-team orchestration is implied.
+
+To try a disposable synthetic 1,001-file repository:
+
+```sh
+python examples/codebase_demo.py
+```
+
+In the recorded local demo, an unchanged update read zero source bytes and reparsed zero files; one changed file plus one deletion caused one reparse and 48 source bytes read. This is a small synthetic workload, not a large-project performance guarantee. See `docs/codebase-demo-results.json` and `docs/codebase-harness-design.md` for measured scope and remaining gaps. Connect these CLI calls to a chosen agent startup hook explicitly; the package does not automatically attach itself to an agent.

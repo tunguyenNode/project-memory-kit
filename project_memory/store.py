@@ -39,10 +39,16 @@ def timestamp(value):
 class MemoryStore:
     """Every record operation requires a project. This is not an auth boundary."""
 
-    def __init__(self, path="memory.sqlite3"):
-        self.db = sqlite3.connect(path)
+    def __init__(self, path="memory.sqlite3", *, read_only=False):
+        if read_only:
+            from pathlib import Path
+            self.db = sqlite3.connect(Path(path).resolve().as_uri() + '?mode=ro', uri=True)
+        else:
+            self.db = sqlite3.connect(path)
         self.db.row_factory = sqlite3.Row
         self.db.execute("PRAGMA foreign_keys=ON")
+        if read_only:
+            return
         self.db.executescript("""
             CREATE TABLE IF NOT EXISTS projects (
                 name TEXT PRIMARY KEY, created_at TEXT NOT NULL);
