@@ -1,10 +1,10 @@
 {
   "LEGACY_PATCH_NOTES.md": "f921a41e1f34d39be818653dc844b4daf63a80e069d29af81517a971feba83d1",
-  "README.md": "1a1bccbbd5e56735ae59d0285ed5af90ccd5c096c3c0cb9d06abc01bb1cc7f31",
-  "docs/codebase-demo-results.json": "f96396a47502d6cc4a256e5be760d09f94510733a7838713c930ca18f8f1de04",
+  "README.md": "d0c6526562354b3b46d752036afc1f99b7e5db916466c9aea17baa81ea122610",
+  "docs/codebase-demo-results.json": "aacfd96b9c853ed23a4fe50087523b7752c86532c3dbf91174f9751a8be120a5",
   "docs/codebase-harness-design.md": "1982e99e868abb1759319cc81c57fd6116418ffa820e140a36d511f9e8558b59",
   "examples/codebase_demo.py": "cd1630e319960efd53992a63effb534d88a7b3250c1a2cb613ae0c8f882bc57a",
-  "project_memory/codebase.py": "0e546b0e855787d4ea00dd35560985519e85d8e6b4d84e77f7fd4583619e957a",
+  "project_memory/codebase.py": "d779f385c3f6f29d48e40b0add7e5cb8e62ca5b1016d2ea7e81d00caa8e95db4",
   "project_memory/store.py": "c529b6a09fb802247c38721ef038bdee23efb3de0e96a7613d768cd34f15b690",
   "tests/test_codebase.py": "92099f67097b68ffb0e0b00ecdd5117c26ed68e1f6c6cd9f68a26ed1ea19642b",
   "tests/test_codebase_review.py": "388ac842abc7499eccf83236f954bf52d64458c36b01db2507bef16e65ca6fce"

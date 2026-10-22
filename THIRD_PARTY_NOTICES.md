@@ -4,7 +4,7 @@ The text files under `vendor-skills/` are reference excerpts/documents from Matt
 
 https://github.com/mattpocock/skills/tree/3cca18b368ae95cdbdebbff572ccafa662551015
 
-They remain under their included MIT license, Copyright (c) 2026 Matt Pocock. Preserve `vendor-skills/LICENSE` and its copyright/permission notice when copying substantial portions. The project's rights-reserved notice does not override or restrict the MIT permissions granted for that third-party material.
+They remain under their included MIT license, Copyright (c) 2026 Matt Pocock. Preserve `vendor-skills/LICENSE` and its copyright/permission notice when copying substantial portions. The project's root MIT license and third-party notices preserve the permissions granted for that third-party material.
 
 `vendor-skills/PROVENANCE.json` lists commit-pinned source URLs and retrieval details. `vendor-skills/SHA256SUMS` checks the saved normalized local texts; these hashes are not claimed to be upstream Git blob identities.
 

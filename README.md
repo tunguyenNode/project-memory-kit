@@ -1,6 +1,10 @@
 # Project Memory Kit
 
-A small, local evidence-linked handoff store for agents. Working name only; no trademark clearance or uniqueness claim. Python 3.10+ and its standard library are enough. No install, API key, model, hosted service, or network access is required.
+[![CI](https://github.com/tunguyenNode/project-memory-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/tunguyenNode/project-memory-kit/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+
+A small, local evidence-linked handoff store, read-only AST codebase onboarding scanner, and verification workflow harness for AI coding agents. Python 3.10+ and its standard library are enough. No external dependencies, API key, model, hosted service, or network access is required for core operations.
 
 ## What works
 
@@ -75,11 +79,11 @@ The tests exercise cross-project read/revision isolation, supersession, rollback
 - Export budgets count serialized ASCII characters (including the envelope), not model tokens. Whole records are retained or omitted; large records may be skipped. Warnings are prioritized over entries, and omission counters make truncation visible. The CLI adds one trailing newline outside the JSON budget. Tiny budgets fail rather than remove the trust boundary.
 - No embeddings, hosted sync, automatic summaries, agent adapters, user interface, production migrations or external-model evaluation are included. Concurrent writes use SQLite locking; contention can fail and needs caller retry. Back up the database with SQLite-aware tooling before evolving it.
 
-## Commercial direction
+## Open-source license and ecosystem direction
 
-This is a foundation for evaluating evidence-linked project handoffs, not a defensible business by itself. Local memory and agent-memory tools already exist. Validate whether explicit decision lineage, trustworthy provenance, scoped retrieval and measured handoff quality solve a specific customer's problem before investing in hosting or integrations. No revenue, novelty or market demand is guaranteed.
+Project Memory Kit is open-source software released under the [MIT License](LICENSE). Third-party reference material under `vendor-skills/` and `examples/click-compact-filename/` retains its respective upstream licenses as documented in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-No open-source license is selected. See LICENSE. Publication and commercial licensing are separate decisions; no GitHub repository is created by this package.
+This toolkit provides a foundation for evaluating evidence-linked project handoffs, explicit decision lineage, trustworthy provenance, scoped retrieval, and deterministic verification checkpoints for coding agents (such as OpenAI Codex CLI and MCP-compatible runtimes).
 
 ## Harness hooks: implemented foundation
 
